@@ -29,7 +29,7 @@
 服务器不需要拉取源码、不需要安装 Go，直接下载对应架构的预编译文件即可。当前仓库是 Public，不需要 GitHub Token。
 
 ```bash
-VERSION=v0.1.1
+VERSION=v0.1.0
 ARCH=$(dpkg --print-architecture)  # amd64 或 arm64
 
 curl -fL --retry 3 \
@@ -47,7 +47,8 @@ cd /usr/local/bin
 curl -fL \
   -o checksums.txt \
   "https://github.com/Fairyx2/xray-setup/releases/download/${VERSION}/checksums.txt"
-grep "xray-setup-linux-${ARCH}$" checksums.txt | sha256sum -c -
+grep "xray-setup-linux-${ARCH}$" checksums.txt | \
+  sed "s/xray-setup-linux-${ARCH}$/xray-setup/" | sha256sum -c -
 ```
 
 也可以在本机下载后用 `scp` 传到服务器：
@@ -130,7 +131,7 @@ go test -race ./...
 make build
 
 # 交叉构建服务器 Release 文件
-make release VERSION=0.1.1
+make release VERSION=0.1.0
 ls -lh dist/xray-setup-linux-*
 ```
 
@@ -146,8 +147,8 @@ git add .
 git commit -m "描述本次修改"
 git push origin main
 
-git tag -a v0.1.1 -m "Release v0.1.1"
-git push origin v0.1.1
+git tag -a v0.1.0 -m "Release v0.1.0"
+git push origin v0.1.0
 ```
 
 ## 目录结构
