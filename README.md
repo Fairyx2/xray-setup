@@ -26,16 +26,13 @@
 
 ## 直接下载 Release
 
-服务器不需要拉取源码、不需要安装 Go，直接下载对应架构的预编译文件即可。当前仓库是 Private，需要一个只读仓库内容权限的 GitHub Token；不要把 Token 写进 URL 或提交到仓库。
+服务器不需要拉取源码、不需要安装 Go，直接下载对应架构的预编译文件即可。当前仓库是 Public，不需要 GitHub Token。
 
 ```bash
 VERSION=v0.1.1
 ARCH=$(dpkg --print-architecture)  # amd64 或 arm64
-export GITHUB_TOKEN='替换为你的 GitHub token'
 
 curl -fL --retry 3 \
-  -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-  -H 'Accept: application/octet-stream' \
   -o /usr/local/bin/xray-setup \
   "https://github.com/Fairyx2/xray-setup/releases/download/${VERSION}/xray-setup-linux-${ARCH}"
 
@@ -48,13 +45,12 @@ chmod 0755 /usr/local/bin/xray-setup
 ```bash
 cd /usr/local/bin
 curl -fL \
-  -H "Authorization: Bearer ${GITHUB_TOKEN}" \
   -o checksums.txt \
   "https://github.com/Fairyx2/xray-setup/releases/download/${VERSION}/checksums.txt"
 grep "xray-setup-linux-${ARCH}$" checksums.txt | sha256sum -c -
 ```
 
-如果仓库改为 Public，可以删除两个 `Authorization` 请求头。也可以在本机下载后用 `scp` 传到服务器：
+也可以在本机下载后用 `scp` 传到服务器：
 
 ```bash
 scp xray-setup-linux-amd64 root@YOUR_VPS_IP:/root/xray-setup
