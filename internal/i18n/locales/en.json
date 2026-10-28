@@ -95,7 +95,7 @@
   "progress.status": "Reading service status",
   "error.unexpected": "Operation failed. Diagnostic details:",
   "error.platform": "Deployment requires Debian Linux. Use --demo for a local preview.",
-  "error.root": "Run as root, for example sudo ./my-vpn.",
+  "error.root": "Run as root, for example sudo ./xray-setup.",
   "error.arch": "Unsupported CPU architecture. Currently supports amd64 and arm64.",
   "error.systemd": "A running systemd instance was not detected.",
   "error.state": "Cannot read managed configuration or verify service ownership. Check existing files first.",

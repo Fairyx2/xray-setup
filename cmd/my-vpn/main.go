@@ -21,7 +21,7 @@ func main() {
 	language := flag.String("lang", "zh", "初始选中的语言 zh/en（启动时仍可选择） / Initial language selection")
 	showVersion := flag.Bool("version", false, "显示版本 / Print version")
 	flag.Usage = func() {
-		fmt.Fprint(flag.CommandLine.Output(), "my-vpn — VLESS + XHTTP + REALITY\n\n用法 / Usage: my-vpn [--demo] [--lang zh|en]\n\n")
+		fmt.Fprint(flag.CommandLine.Output(), "xray-setup — VLESS + XHTTP + REALITY\n\n用法 / Usage: xray-setup [--demo] [--lang zh|en]\n\n")
 		flag.PrintDefaults()
 	}
 	flag.Parse()

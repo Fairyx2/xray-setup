@@ -95,7 +95,7 @@
   "progress.status": "读取服务状态",
   "error.unexpected": "操作失败，诊断信息如下：",
   "error.platform": "实际部署仅支持 Debian Linux；本地预览请使用 --demo。",
-  "error.root": "请使用 root 运行，例如 sudo ./my-vpn。",
+  "error.root": "请使用 root 运行，例如 sudo ./xray-setup。",
   "error.arch": "暂不支持此 CPU 架构，目前支持 amd64 和 arm64。",
   "error.systemd": "未检测到正在运行的 systemd，无法部署服务。",
   "error.state": "无法读取本工具的配置或确认服务归属，请先检查已有文件。",

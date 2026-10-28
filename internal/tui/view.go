@@ -20,10 +20,10 @@ var (
 
 func (m Model) View() string {
 	if m.width < 40 || m.height < 14 {
-		return "my-vpn\n" + m.tr.T("terminal.small") + "\nCtrl+C"
+		return "xray-setup\n" + m.tr.T("terminal.small") + "\nCtrl+C"
 	}
 	width := min(m.width-4, 100)
-	header := titleStyle.Render("my-vpn") + "  " + mutedStyle.Render("VLESS + XHTTP + REALITY")
+	header := titleStyle.Render("xray-setup") + "  " + mutedStyle.Render("VLESS + XHTTP + REALITY")
 	if m.demo {
 		header += "\n" + warningStyle.Render(m.tr.T("demo.banner"))
 	}
@@ -193,7 +193,7 @@ func (m Model) outputText() string {
 
 func (m Model) maxScroll() int {
 	width := max(10, min(m.width-4, 100))
-	header := "my-vpn  VLESS + XHTTP + REALITY"
+	header := "xray-setup  VLESS + XHTTP + REALITY"
 	if m.demo {
 		header += "\n" + m.tr.T("demo.banner")
 	}
