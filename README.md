@@ -33,7 +33,12 @@ make release
 ```bash
 VERSION=v0.1.0
 ARCH=amd64  # arm64 VPS 改为 arm64
-curl -fL --retry 3 -o /usr/local/bin/my-vpn \
+# 当前仓库是 Private：先在服务器临时设置一个只有仓库读取权限的 token。
+export GITHUB_TOKEN='替换为你的 GitHub token'
+curl -fL --retry 3 \
+  -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+  -H 'Accept: application/octet-stream' \
+  -o /usr/local/bin/my-vpn \
   "https://github.com/Fairyx2/my-vpn/releases/download/${VERSION}/my-vpn-linux-${ARCH}"
 chmod 0755 /usr/local/bin/my-vpn
 /usr/local/bin/my-vpn --version
@@ -43,11 +48,14 @@ chmod 0755 /usr/local/bin/my-vpn
 
 ```bash
 cd /usr/local/bin
-curl -fLO "https://github.com/Fairyx2/my-vpn/releases/download/${VERSION}/checksums.txt"
+curl -fL \
+  -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+  -o checksums.txt \
+  "https://github.com/Fairyx2/my-vpn/releases/download/${VERSION}/checksums.txt"
 grep "my-vpn-linux-${ARCH}$" checksums.txt | sha256sum -c -
 ```
 
-然后直接运行 `/usr/local/bin/my-vpn`。Release 文件是公开的；如果仓库改为私有，需要使用 GitHub token 或先在本地下载后通过 `scp` 传到服务器。
+然后直接运行 `/usr/local/bin/my-vpn`。如果把仓库改为 Public，可以去掉两个 `Authorization` 头；也可以先在本地下载，再通过 `scp` 传到服务器。不要把 token 写进下载 URL 或提交到仓库。
 
 ## 在服务器运行
 
