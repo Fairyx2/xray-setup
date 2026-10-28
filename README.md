@@ -28,27 +28,46 @@
 
 服务器不需要拉取源码、不需要安装 Go，直接下载对应架构的预编译文件即可。当前仓库是 Public，不需要 GitHub Token。
 
+默认命令（以 root 用户登录时使用，无需 `sudo`）：
+
 ```bash
 VERSION=v0.1.0
 ARCH=$(dpkg --print-architecture)  # amd64 或 arm64
 
 curl -fL --retry 3 \
   -o /usr/local/bin/xray-setup \
-  "https://github.com/Fairyx2/xray-setup/releases/download/${VERSION}/xray-setup-linux-${ARCH}"
-
-chmod 0755 /usr/local/bin/xray-setup
-/usr/local/bin/xray-setup --version
+  "https://github.com/Fairyx2/xray-setup/releases/download/${VERSION}/xray-setup-linux-${ARCH}" \
+  && chmod 0755 /usr/local/bin/xray-setup \
+  && /usr/local/bin/xray-setup --version
 ```
 
-校验下载内容：
+如果写入 `/usr/local/bin` 时提示 `Permission denied` 或伴随权限错误的 `curl: (23)`，说明当前用户没有该目录的写入权限，改用下面的命令。它先下载到临时文件，再通过 `sudo` 安装；下载失败时不会继续安装：
 
 ```bash
-cd /usr/local/bin
-curl -fL \
-  -o checksums.txt \
-  "https://github.com/Fairyx2/xray-setup/releases/download/${VERSION}/checksums.txt"
-grep "xray-setup-linux-${ARCH}$" checksums.txt | \
-  sed "s/xray-setup-linux-${ARCH}$/xray-setup/" | sha256sum -c -
+VERSION=v0.1.0
+ARCH=$(dpkg --print-architecture)  # amd64 或 arm64
+DOWNLOAD_FILE=$(mktemp)
+
+curl -fL --retry 3 \
+  -o "$DOWNLOAD_FILE" \
+  "https://github.com/Fairyx2/xray-setup/releases/download/${VERSION}/xray-setup-linux-${ARCH}" \
+  && sudo install -m 0755 "$DOWNLOAD_FILE" /usr/local/bin/xray-setup \
+  && rm -f "$DOWNLOAD_FILE" \
+  && /usr/local/bin/xray-setup --version
+```
+
+此方式需要当前用户有 `sudo` 权限；如果系统没有 `sudo` 或当前用户无权使用，请切换到 root 后执行默认命令。
+
+校验下载内容（沿用上面的 `VERSION` 和 `ARCH`；两种安装方式均可使用，无需 `sudo`）：
+
+```bash
+CHECKSUM_FILE=$(mktemp)
+curl -fL --retry 3 \
+  -o "$CHECKSUM_FILE" \
+  "https://github.com/Fairyx2/xray-setup/releases/download/${VERSION}/checksums.txt" \
+  && grep "xray-setup-linux-${ARCH}$" "$CHECKSUM_FILE" | \
+    sed "s|xray-setup-linux-${ARCH}$|/usr/local/bin/xray-setup|" | sha256sum -c - \
+  && rm -f "$CHECKSUM_FILE"
 ```
 
 也可以在本机下载后用 `scp` 传到服务器：
@@ -63,9 +82,16 @@ Release 页面：[github.com/Fairyx2/xray-setup/releases](https://github.com/Fai
 
 要求：Debian、root 权限、systemd、可访问 GitHub 的出站网络，以及 `ca-certificates`、`iproute2` 等常用工具。容器中没有运行 systemd 时不能完成实际部署。
 
+默认以 root 用户启动：
+
 ```bash
-chmod +x /usr/local/bin/xray-setup
 /usr/local/bin/xray-setup
+```
+
+普通用户启动时，如果提示需要 root 权限，使用：
+
+```bash
+sudo /usr/local/bin/xray-setup
 ```
 
 启动后按向导操作：
