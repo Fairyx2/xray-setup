@@ -176,7 +176,8 @@ func (p Profile) ShareLink() string {
 		"sni": {p.ServerName}, "fp": {p.Fingerprint}, "pbk": {p.PublicKey}, "sid": {p.ShortID},
 		"path": {p.Path}, "mode": {p.Mode},
 	}
-	return (&url.URL{Scheme: "vless", User: url.User(p.UUID), Host: net.JoinHostPort(p.Address, strconv.Itoa(p.Port)), RawQuery: query.Encode(), Fragment: "my-vpn"}).String()
+	// URL 片段仅作为客户端显示的节点备注，不参与服务端认证或主入站 tag 定位。
+	return (&url.URL{Scheme: "vless", User: url.User(p.UUID), Host: net.JoinHostPort(p.Address, strconv.Itoa(p.Port)), RawQuery: query.Encode(), Fragment: "xray-setup"}).String()
 }
 
 // ShareLinkFor 同步原生 xhttpSettings 的额外参数，避免高级 JSON 中的客户端设置在导出时丢失。
